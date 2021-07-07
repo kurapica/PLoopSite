@@ -1,0 +1,21 @@
+@for _, comment in self.comments:GetIterator() do
+<div class="row" refresh-target="parent">
+	<input type="hidden" name="name" value="@\self.name"/>
+	<div class="form-control card">
+		<p>@\comment.content
+			<button type="button" class="close" refresh-action="/api/comment/list/@comment.id" refresh-method="DELETE">
+				<input type="hidden" name="id" value="@comment.id"/>
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</p>
+	</div>
+</div>
+@end
+
+<div refresh-target="parent" role="form" class="textareaForm">
+	<input type="hidden" name="name" value="@\self.name"/>
+	<div class="form-group">
+		<textarea class="form-control" style="overflow:hidden;" rows="3" name="content"></textarea>
+	</div>
+	<button refresh-action="/api/comment/list" refresh-method="POST" class="zg-right btn btn-danger comment-reply">发表评论</button>
+</div>

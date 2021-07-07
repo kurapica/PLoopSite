@@ -1,0 +1,36 @@
+@{ master = "namespace.view" }
+
+@{
+	export { Dictionary, List, Struct, Member, getname = Namespace.GetNamespaceName }
+}
+
+@detail{
+	<div class="panel panel-default">
+		<div class="panel-body">
+			@local category = Struct.GetStructCategory(self.Type)
+			@if category == "CUSTOM" then
+			<h4>Custom</h4>
+			@elseif category == "ARRAY" then
+			@local array = Struct.GetArrayElement(self.Type)
+			<h4>Array</h4>
+			<div class="list-group">
+				@for name in getname(array):gmatch("[^|]+") do
+				@>name = name:trim()
+				<a href="@("/" .. name:gsub("%.", "/"))" class="list-group-item">@name</a>
+				@end
+			</div>
+			@else
+			<h4>MEMBER</h4>
+			<table class="table">
+				@for _, mem in Struct.GetMembers(self.Type) do
+				@local tname = getname(Member.GetType(mem))
+				<tr>
+					<td>@Member.GetName(mem)</td>
+					<td><a href="@("/" .. tname:gsub("%.", "/"))" class="list-group-item">@tname</a></td>
+				</tr>
+				@end
+			</table>
+			@end
+		</div>
+	</div>
+}

@@ -1,0 +1,76 @@
+@{ master = "/share/type.master" }
+
+@{
+	export { Dictionary, Namespace, Class, Struct, Enum, Interface, getName = Namespace.GetNamespaceName, PLoop = PLoop }
+}
+
+@body{
+	@local path = ("/" .. (self.Type ~= PLoop and (getName(self.Type):gsub("%.", "/") .. "/") or ""))
+	<div class="panel panel-default">
+		<div class="panel-body">
+			@local dict = Dictionary(Namespace.GetNamespaces(self.Type), {})
+			@>local lst = dict:Filter(function(k, v) return getmetatable(v) == v end).Keys:ToList():QuickSort()
+			@if #lst > 0 then
+			<h4>Prototype</h4>
+			<div class="list-group">
+				@for _, name in lst:GetIterator() do
+				@>dict[name] = nil
+				<a href="@(path .. name)" class="list-group-item">@name</a>
+				@end
+			</div>
+			@end
+			@>lst  = dict:Filter(function(k, v) return Enum.Validate(v) end).Keys:ToList():QuickSort()
+			@if #lst > 0 then
+			<h4>Enum</h4>
+			<div class="list-group">
+				@for _, name in lst:GetIterator() do
+				@>dict[name] = nil
+				<a href="@(path .. name)" class="list-group-item">@name</a>
+				@end
+			</div>
+			@end
+			@>lst = dict:Filter(function(k, v) return Struct.Validate(v) end).Keys:ToList():QuickSort()
+			@if #lst > 0 then
+			<h4>Struct</h4>
+			<div class="list-group">
+				@for _, name in lst:GetIterator() do
+				@>dict[name] = nil
+				<a href="@(path .. name)" class="list-group-item">@name</a>
+				@end
+			</div>
+			@end
+			@>lst = dict:Filter(function(k, v) return Interface.Validate(v) end).Keys:ToList():QuickSort()
+			@if #lst > 0 then
+			<h4>Interface</h4>
+			<div class="list-group">
+				@for _, name in lst:GetIterator() do
+				@>dict[name] = nil
+				<a href="@(path .. name)" class="list-group-item">@name</a>
+				@end
+			</div>
+			@end
+			@>lst = dict:Filter(function(k, v) return Class.Validate(v) end).Keys:ToList():QuickSort()
+			@if #lst > 0 then
+			<h4>Class</h4>
+			<div class="list-group">
+				@for _, name in lst:GetIterator() do
+				@>dict[name] = nil
+				<a href="@(path .. name)" class="list-group-item">@name</a>
+				@end
+			</div>
+			@end
+			@>lst = dict.Keys:ToList():QuickSort()
+			@if #lst > 0 then
+			<h4>Namespace</h4>
+			<div class="list-group">
+				@for _, name in lst:GetIterator() do
+				@>dict[name] = nil
+				<a href="@(path .. name)" class="list-group-item">@name</a>
+				@end
+			</div>
+			@end
+		</div>
+	</div>
+
+	@{detail}
+}

@@ -1,0 +1,19 @@
+@{ master = "/share/type.master" }
+
+@{
+	export { Dictionary, Namespace, getName = Namespace.GetNamespaceName, PLoop = PLoop }
+}
+
+@body{
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table class="table">
+				@for _, v in Dictionary(Prototype.GetMethods(self.Type, {})).Keys:ToList():QuickSort():GetIterator() do
+				<tr>
+					<td>@v</td>
+				</tr>
+				@end
+			</table>
+		</div>
+	</div>
+}

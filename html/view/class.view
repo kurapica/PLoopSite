@@ -1,0 +1,96 @@
+@{ master = "namespace.view" }
+
+@{
+	export { Dictionary, List, Class, Event, Property, getname = Namespace.GetNamespaceName }
+}
+
+@detail{
+	<div class="panel panel-default">
+		<div class="panel-body">
+			@local super= Class.GetSuperClass(self.Type)
+			@if super then
+			<h4>Super Class</h4>
+			<div class="list-group">
+				<a href="@("/" .. getname(super):gsub("%.", "/"))" class="list-group-item">@getname(super)</a>
+			</div>
+			@end
+
+			@local extends = List(Class.GetExtends(self.Type, {}))
+			@if #extends > 0 then
+			<h4>Extend Interfaces</h4>
+			<div class="list-group">
+				@for _, intf in extends:GetIterator() do
+				<a href="@("/" .. getname(intf):gsub("%.", "/"))" class="list-group-item">@getname(intf)</a>
+				@end
+			</div>
+			@end
+
+			@local lst  = Dictionary(Class.GetMethods(self.Type), {}).Keys:ToList():QuickSort()
+			@local slst = lst:Filter(function(name) return Class.IsStaticMethod(self.Type, name) end):ToList()
+			@if #slst > 0 then
+			<h4>Static Method</h4>
+			<ul class="list-group">
+				@for _, name in slst:GetIterator() do
+				<li class="list-group-item">@name</li>
+				@end
+			</ul>
+			@end
+			@>slst = lst:Filter(function(name) return not Class.IsStaticMethod(self.Type, name) end):ToList()
+			@if #slst > 0 then
+			<h4>Object Method</h4>
+			<ul class="list-group">
+				@for _, name in slst:GetIterator() do
+				<li class="list-group-item">@name</li>
+				@end
+			</ul>
+			@end
+
+			@local features = Dictionary(Class.GetFeatures(self.Type, {}))
+			@local events   = features:Filter(function(k, v) return Event.Validate(v) end).Keys:ToList():QuickSort()
+			@if #events > 0 then
+				@local sevents = events:Filter(function(k) return Event.IsStatic(features[k]) end):ToList()
+				@if #sevents > 0 then
+					<h4>Static Event</h4>
+					<ul class="list-group">
+						@for _, name in sevents:GetIterator() do
+						@> features[name] = nil
+						<li class="list-group-item">@name</li>
+						@end
+					</ul>
+				@end
+				@> sevents = events:Filter(function(k) return not Event.IsStatic(features[k]) end):ToList()
+				@if #sevents > 0 then
+					<h4>Object Event</h4>
+					<ul class="list-group">
+						@for _, name in sevents:GetIterator() do
+						@> features[name] = nil
+						<li class="list-group-item">@name</li>
+						@end
+					</ul>
+				@end
+			@end
+
+			@local props = features.Keys:ToList():QuickSort()
+			@if #props > 0 then
+				@local sprops = props:Filter(function(k) return Property.IsStatic(features[k]) end):ToList()
+				@if #sprops > 0 then
+					<h4>Static Property</h4>
+					<ul class="list-group">
+						@for _, name in sprops:GetIterator() do
+						<li class="list-group-item">@name</li>
+						@end
+					</ul>
+				@end
+				@> sprops = props:Filter(function(k) return not Property.IsStatic(features[k]) end):ToList()
+				@if #sprops > 0 then
+					<h4>Object Property</h4>
+					<ul class="list-group">
+						@for _, name in sprops:GetIterator() do
+						<li class="list-group-item">@name</li>
+						@end
+					</ul>
+				@end
+			@end
+		</div>
+	</div>
+}

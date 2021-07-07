@@ -1,0 +1,25 @@
+@{ master = "/share/type.master" }
+
+@{
+	export { Dictionary, Enum }
+}
+
+@body{
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table class="table">
+				@{
+					local dict = Dictionary(Enum.GetEnumValues(self.Type))
+					local map  = {}
+					for k, v in dict:GetIterator() do map[v] = k end
+				}
+				@for _, v in dict.Values:ToList():QuickSort():GetIterator() do
+				<tr>
+					<td>@map[v]</td>
+					<td>@v</td>
+				</tr>
+				@end
+			</table>
+		</div>
+	</div>
+}

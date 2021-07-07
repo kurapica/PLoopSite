@@ -1,0 +1,19 @@
+@js(name) {
+    <script type="text/javascript" src="/js/@(name).js"></script>
+}
+
+@css(name) {
+    <link rel="stylesheet" href="/css/@(name).css">
+}
+
+@rawjs(name) {
+    <script type="text/javascript">
+        @[/static/js/@appendVerSfx(name, '.js') // /js/@appendVerSfx(name, '.js')]
+    </script>
+}
+
+@rawcss(name) {
+    <style type="text/css">
+        @[/static/css/@appendVerSfx(name, '.css') // /css/@appendVerSfx(name, '.css')]
+    </style>
+}

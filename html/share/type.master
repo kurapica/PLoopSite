@@ -1,0 +1,29 @@
+@{ master = "/share/global.master" }
+
+@{
+	export { getName = Namespace.GetNamespaceName, tblconcat = table.concat, PLoop = PLoop }
+}
+
+@nav{
+	@{
+		local cache = {}
+		if self.Type ~= PLoop then
+			getName(self.Type):gsub("[_%w]+", function(name) cache[#cache + 1] = name end)
+		end
+	}
+	<ol class="breadcrumb">
+		<li><a href="/">PLoop</a></li>
+		@for i = 1, #cache - 1 do
+		<li><a href="@("/" .. tblconcat(cache, "/", 1, i))">@cache[i]</a></li>
+		@end
+		@if #cache > 0 then
+		<li class="active">@(cache[#cache] or "PLoop")</li>
+		@end
+	</ol>
+}
+
+@comment{
+	<div class="container">
+		@[~/api/comment/list ({ name = getName(self.Type) })]
+	</div>
+}
