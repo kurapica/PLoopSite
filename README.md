@@ -18,3 +18,6 @@ nginx -p `pwd`/ -c conf/nginx.conf
 ```
 
 Then you can access the website, it'll show all type features current running on the server.
+
+
+[Openresty]: https://github.com/openresty/lua-nginx-module/ "Openresty"
