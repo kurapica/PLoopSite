@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  app:
+  ploopsite:
     image: kurapica125/ploop
     ports:
       - 80:80
