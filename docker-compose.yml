@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  app:
+    image: kurapica125/ploop
+    ports:
+      - 80:80
+    volumes:
+      - ./conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./conf/loader.lua:/usr/local/openresty/nginx/conf/loader.lua
+      - ./app:/usr/local/openresty/nginx/app
+      - ./html:/usr/local/openresty/nginx/html

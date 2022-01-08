@@ -1,5 +1,5 @@
 require "app.global"
-require "app.database"
+--require "app.database"
 require "app.route"
 
 -- model
